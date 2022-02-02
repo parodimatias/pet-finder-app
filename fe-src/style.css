@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+body {
+  border: solid 1px black;
+  display: block;
+  margin: auto;
+  width: 300px;
+}
+.container {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+label,
+.caption {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+.title-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+}
+.subtitle-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 24px;
+}
+.subtitle-text-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+}
+.body-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
+button,
+.body-text-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+input {
+  height: 50px;
+  border: solid 2px;
+  border-radius: 4px;
+}
+.pets-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.pet__item {
+  border: solid black 1px;
+  display: flex;
+  flex-direction: column;
+}
+.pet__img-container {
+  border: solid 1px black;
+  height: 147px;
+  overflow: hidden;
+}
+.pet__data-container {
+  border: solid 1px black;
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.pet__description-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.pet__description-name {
+  margin: 0;
+}
+.pet__description-link {
+  width: 45%;
+  text-align: center;
+  position: relative;
+}
+.pet__link {
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "sequelize",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev:be": "nodemon --watch ./be-src --exec ts-node ./be-src/index.ts",
+    "dev:fe": "yarn parcel serve ./fe-src/index.html --dist-dir ./fe-dist",
+    "built:be": "tsc",
+    "built:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist"
+  },
+  "dependencies": {
+    "@types/dropzone": "^5.7.4",
+    "@types/mapbox": "^1.6.42",
+    "@vaadin/router": "^1.7.4",
+    "algoliasearch": "^4.12.0",
+    "cloudinary": "^1.28.1",
+    "cors": "^2.8.5",
+    "dropzone": "^6.0.0-beta.2",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mapbox": "^1.0.0-beta10",
+    "mapbox-gl": "^2.6.1",
+    "parcel": "^2.2.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^7.0.0-alpha.2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "./be-dist"
+  },
+  "include": ["be-src"],
+  "exclude": ["node_modules"]
+}

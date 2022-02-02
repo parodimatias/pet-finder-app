@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      href="//api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="//api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+    <script src="//unpkg.com/mapbox@1.0.0-beta9/dist/mapbox-sdk.min.js"></script>
+
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="root"></div>
+  </body>
+  <script defer type="module" src="./index.ts"></script>
+  <template id="template-item">
+    <div class="pet__item">
+      <div class="pet__img-container"></div>
+      <div class="pet__data-container">
+        <div class="pet__description-container">
+          <p class="pet__description-name title-text"></p>
+          <p class="pet__description-location caption"></p>
+        </div>
+        <div class="pet__description-link">
+          <a class="pet__link" href="">REPORTAR INFORMACION</a>
+        </div>
+      </div>
+    </div>
+  </template>
+</html>
+<style></style>
