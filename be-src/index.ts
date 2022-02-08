@@ -1,3 +1,4 @@
+import "dotenv/config";
 import * as cors from "cors";
 import * as express from "express";
 import {
@@ -9,8 +10,14 @@ import {
   updateProfile,
   reportLostPet,
 } from "./controller/user-controller";
+import {
+  getPets,
+  getAllPets,
+  deletePet,
+  foundPet,
+  updateLostPet,
+} from "./controller/pet-controller";
 const app = express();
-
 app.use(express.json());
 app.use(express.static("dist"));
 app.use(cors());
@@ -48,7 +55,6 @@ app.post("/auth/token", async (req, res) => {
 });
 
 app.get("/me", verifyToken, async (req, res) => {
-  console.log("la request es", req);
   const user = await findUserbyPk(req._user_id.id);
   res.json(user);
 });
@@ -71,12 +77,11 @@ app.post("/profileupdate", async (req, res) => {
 });
 app.post("/report-lost-pet", async (req, res) => {
   try {
-    const newLostPet = await reportLostPet(bodyToIndex(req.body));
+    const newLostPet = await reportLostPet(req.body);
     res.json(newLostPet);
   } catch (err) {
     console.log(err);
   }
-  // console.log(objectIDs);
 });
 function bodyToIndex(body) {
   const respuesta: any = {};
@@ -92,8 +97,11 @@ function bodyToIndex(body) {
     respuesta.lng = body.lng;
   }
 
-  if (body.userId) {
-    respuesta.userId = body.userId;
+  if (body.id) {
+    respuesta.id = body.id;
+  }
+  if (body.location) {
+    respuesta.location = body.location;
   }
   return respuesta;
 }
@@ -102,13 +110,28 @@ function bodyToIndex(body) {
 //   const comercio = await Comercio.findAll();
 //   res.json(comercio);
 // });
-// app.get("/products/:id", async (req, res) => {
-//   const comercio = await Comercio.findAll({
-//     where: req.params,
-//   });
-//   res.json(comercio);
+app.get("/pets/:userId", async (req, res) => {
+  const pets = await getPets(req.params);
+  res.json(pets);
+});
+app.delete("/pet/:petId", async (req, res) => {
+  const response = await deletePet(req.params);
+  res.json(response);
+});
+app.patch("/pet", async (req, res) => {
+  const response = await foundPet(req.body);
+  res.json(response);
+});
+app.put("/pet", async (req, res) => {
+  const response = await updateLostPet(bodyToIndex(req.body));
+  console.log(response);
+  res.json(response);
+});
 // });
-// }
+// app.get("/pets/", async (req, res) => {
+//   const pets = await getAllPets();
+//   res.json(pets);
+// });
 // app.put("/comercio/:id", async (req, res) => {
 //   const newComercio = await Comercio.update(req.body, {
 //     where: req.params,

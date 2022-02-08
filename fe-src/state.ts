@@ -1,5 +1,6 @@
 const API_BASE_URL = "http://localhost:3000";
 import { Router } from "@vaadin/router";
+// import { UPSERT } from "sequelize/types/lib/query-types";
 const state = {
   data: {
     token: "",
@@ -9,9 +10,12 @@ const state = {
     userId: "",
     lat: false,
     lng: false,
+    editPetId: "",
     reportPetName: "",
+    reportPetLocation: "",
     reportPetLat: false,
     reportPetLng: false,
+    reportPetPicture: "",
     myReportedPets: [],
     logged: false,
     lastAddress: "",
@@ -55,6 +59,34 @@ const state = {
       Router.go("/email-page");
     }
   },
+  async foundPet() {
+    const cs = state.getState();
+    const data = await fetch(API_BASE_URL + "/pet/", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: cs.editPetId,
+        found: true,
+      }),
+    });
+    const response = await data.json();
+    console.log(response);
+    return response;
+  },
+
+  async unlinkPet() {
+    const cs = state.getState();
+    const data = await fetch(API_BASE_URL + "/pet/" + cs.editPetId, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const response = await data.json();
+    return response;
+  },
   async checkEmail() {
     const cs = state.getState();
     const data = await fetch(API_BASE_URL + "/email", {
@@ -68,6 +100,45 @@ const state = {
     });
     const response = await data.json();
     return response;
+  },
+  async auth() {
+    const cs = state.getState();
+
+    const data = await fetch(API_BASE_URL + "/auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: cs.email,
+        fullName: cs.fullName,
+        password: cs.password,
+      }),
+    });
+    const response = await data.json();
+    if (response == "ok") {
+      return true;
+    }
+  },
+  async profileUpdate() {
+    const cs = state.getState();
+    const data = await fetch(API_BASE_URL + "/profileupdate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: cs.userId,
+        fullname: cs.fullName,
+        password: cs.password,
+      }),
+    });
+    const response = await data.json();
+    if (response == "updated") {
+      return true;
+    } else {
+      return false;
+    }
   },
   async getAuthToken() {
     const cs = state.getState();
@@ -118,8 +189,10 @@ const state = {
       lat: false,
       lng: false,
       reportPetName: "",
+      reportPetLocation: "",
       reportPetLat: false,
       reportPetLng: false,
+      reportPetPicture: "",
       myReportedPets: [],
       logged: false,
       lastAddress: "",
@@ -137,18 +210,57 @@ const state = {
     });
     //enviar location y recibir pets mediante busqueda en algolia
   },
+  async getMyReportedPets() {
+    const cs = state.getState();
+    console.log("/pets/" + cs.userId);
+    const response = await fetch(API_BASE_URL + "/pets/" + cs.userId);
+    const data = await response.json();
+    return data;
+  },
   removeListeners() {
     this.listeners = [];
   },
   async reportLostPet() {
     const cs = state.getState();
-    const data = await fetch(API_BASE_URL + "/auth/token", {
+    const data = await fetch(API_BASE_URL + "/report-lost-pet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+        userId: cs.userId,
+        nombre: cs.reportPetName,
+        picture: cs.reportPetPicture,
+        lat: cs.reportPetLat,
+        lng: cs.reportPetLng,
+        location: cs.reportPetLocation,
+      }),
     });
+    const response = await data.json();
+    if (response == "Pet already created") {
+      return false;
+    } else if (response == "Pet created") {
+      return true;
+    }
+  },
+  async updateLostPet() {
+    const cs = state.getState();
+    const data = await fetch(API_BASE_URL + "/pet", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: cs.editPetId,
+        nombre: cs.reportPetName,
+        picture: cs.reportPetPicture,
+        lat: cs.reportPetLat,
+        lng: cs.reportPetLng,
+        location: cs.reportPetLocation,
+      }),
+    });
+    const response = await data.json();
+    return response;
   },
 };
 

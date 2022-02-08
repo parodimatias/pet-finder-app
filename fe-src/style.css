@@ -71,7 +71,7 @@ input {
 .pet__img-container {
   border: solid 1px black;
   height: 147px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 .pet__data-container {
   border: solid 1px black;
@@ -97,4 +97,7 @@ input {
   position: absolute;
   bottom: 10px;
   right: 5px;
+}
+.dz-image::before {
+  max-width: 278px;
 }

@@ -14,6 +14,11 @@ Pet.init(
       allowNull: false,
       primaryKey: true,
     },
+    location: DataTypes.STRING,
+    found: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   { sequelize, modelName: "pet" }
 );

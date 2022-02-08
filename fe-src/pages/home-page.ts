@@ -10,12 +10,14 @@ customElements.define(
     connectedCallback() {
       state.removeListeners();
       this.render();
+
       state.subscribe(() => {
         this.render();
       });
     }
 
     render() {
+      console.log(process.env.MAPBOX_TOKEN);
       const cs = state.getState();
       this.className = "home-page";
 

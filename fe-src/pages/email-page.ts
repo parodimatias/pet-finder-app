@@ -38,7 +38,7 @@ customElements.define(
           if (res) {
             Router.go("password-page");
           } else {
-            Router.go("my-data-page");
+            Router.go("my-data");
           }
         });
       });

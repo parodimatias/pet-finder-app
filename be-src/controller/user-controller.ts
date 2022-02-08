@@ -1,8 +1,8 @@
-import { petAlgoliaIndex } from "../../lib/algolia";
+import { petAlgoliaIndex } from "../lib/algolia";
 import { Pet, User, Auth } from "../models/models";
-import { cloudinary } from "../../lib/cloudinary";
+import { cloudinary } from "../lib/cloudinary";
 import * as jwt from "jsonwebtoken";
-const SECRET = "ABCDEFG";
+const SECRET = process.env.JWT_SECRET;
 export async function checkEmailExist(email: string): Promise<boolean> {
   try {
     const project = await User.findOne({ where: { email } });
@@ -115,6 +115,7 @@ export async function reportLostPet(data: {
   picture;
   lat;
   lng;
+  location;
 }) {
   const foundUser = await findUserbyPk(data.userId);
   if (foundUser) {
@@ -126,18 +127,20 @@ export async function reportLostPet(data: {
       },
     });
     if (petFound) {
-      return "Esa mascota ya existe para ese usuario";
+      return "Pet already created";
     } else {
       const image = await cloudinary.uploader.upload(data.picture, {
         tags: "basic_sample",
       });
-      console.log(image.url);
+      console.log(data.location);
       const newPet = await foundUser.createPet({
         nombre: data.nombre,
         lat: data.lat,
         lng: data.lng,
         picture: image.url,
+        location: data.location,
       });
+      console.log(newPet);
       const algoliaRes = await petAlgoliaIndex
         .saveObject({
           objectID: newPet.get("id"),
@@ -149,8 +152,7 @@ export async function reportLostPet(data: {
           },
         })
         .wait();
-      console.log(algoliaRes);
-      return "ok";
+      return "Pet created";
     }
   }
   return "user not found, error";

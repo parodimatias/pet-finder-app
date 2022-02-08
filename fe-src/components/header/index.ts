@@ -122,6 +122,11 @@ export function headerComponent() {
         const myReportedPetsButton = shadow.querySelector(".my-reported-pets");
         const reportPetButton = shadow.querySelector(".report-pet");
         const loggingButton = shadow.querySelector(".logging");
+        const logo = shadow.querySelector(".logo");
+        logo.addEventListener("click", (e) => {
+          e.preventDefault();
+          Router.go("/");
+        });
         myDataButton.addEventListener("click", (e) => {
           e.preventDefault();
           menu.style.display = "none";
@@ -130,12 +135,12 @@ export function headerComponent() {
         myReportedPetsButton.addEventListener("click", (e) => {
           e.preventDefault();
           menu.style.display = "none";
-          state.go("/my-reported-pets");
+          state.go("/my-reportedpets");
         });
         reportPetButton.addEventListener("click", (e) => {
           e.preventDefault();
           menu.style.display = "none";
-          Router.go("/report-pet");
+          state.go("/report-pet");
         });
         loggingButton.addEventListener("click", (e) => {
           e.preventDefault();

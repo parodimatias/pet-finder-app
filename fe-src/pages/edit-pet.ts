@@ -4,10 +4,8 @@ import Dropzone from "dropzone";
 import { initMap, initSearchForm } from "../lib/mapbox";
 import { any } from "sequelize/types/lib/operators";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoibWF0aWFzcGFyb2RpIiwiYSI6ImNreTh6NnNlcDAxZXQycWs5c2VndTQxemYifQ.g5ici0kzf8C_pEntf30JYA";
 customElements.define(
-  "report-pet",
+  "edit-pet",
   class extends HTMLElement {
     constructor() {
       super();
@@ -22,19 +20,19 @@ customElements.define(
       this.innerHTML = /*html*/ `
       <custom-header></custom-header>
       <div class="container">
-      <h1 class="title-text">Reportar nueva mascota</h1>
+      <h1 class="title-text">Editar mascota perdida</h1>
       <form action="" class="form dropzone">
       <label for="name"
         >Nombre      </label>
       <input type="text" name="name" id="name">
-      <button  type="button" class="picture-container">
-      <p class="picture-button">Arrastra o clickea para subir foto</p></button>
+      <div class="picture-container">Arrastra o clickea para subir foto></div>
       <div id="map" style="width: 100%; height: 200px"> </div>
       <label  for="search-form-container">Busca localizacion y arrastra el marcador
       <div class="search-form-container" name="search-form-container"><input class="q"name="q" type="search" />
       <button class="search-button">Buscar</button></div></label>
-      <button class="report-pet">Reportar como perdido</button>
-      <button class="cancel">Cancelar</button>
+      <button class="report-pet">Guardar</button>
+      <button class="found">Report como encontrado</button>
+      <button class="unlink caption-text">Desvincular</button>
     </form>
     </div>
       <style>
@@ -56,24 +54,29 @@ customElements.define(
           flex-direction:row;
           justify-content:space-between;
         }
+        .unlink{
+          background: none;
+          color:red;
+          border:none;
+          text-decoration: underline;
+        }
 
       </style>
   `;
       const cs = state.getState();
-      cs.reportPetPicture = "";
-      cs.reportPetLocation = "";
-      cs.reportPetName = "";
-      cs.reportPetLat = "";
-      cs.reportPetLng = "";
+      const petName = <HTMLInputElement>document.querySelector("#name");
+      petName.value = cs.reportPetName;
       // dropzone //
       const myDropzone = new Dropzone(".picture-container", {
         url: "/falsa",
         autoProcessQueue: false,
         // addRemoveLinks: true,
         thumbnailWidth: 200,
+        thumbnailHeight: 150,
         // previewsContainer: ".picture",
         clickable: true,
       });
+      cs.reportPetPicture = "";
       myDropzone.on("thumbnail", function (file) {
         // usando este evento pueden acceder al dataURL directamente
         cs.reportPetPicture = file.dataURL;
@@ -88,49 +91,59 @@ customElements.define(
         e.preventDefault();
         const searchText = searchTextEl.value;
         cs.reportPetLocation = searchText;
+        state.setState(cs);
         const a = initSearchForm(initializeddMap, searchText);
       });
       //////
-      const cancelButton = document.querySelector(".cancel");
-      cancelButton.addEventListener("click", (e) => {
+      const foundButton = document.querySelector(".found");
+      foundButton.addEventListener("click", (e) => {
         e.preventDefault();
-        Router.go("/");
+        state.foundPet().then((res) => {
+          console.log(res);
+          cs.editPetId = "";
+          state.setState(cs);
+          Router.go("/my-reportedpets");
+        });
       });
-      const reportButton = document.querySelector(".report-pet");
-      reportButton.addEventListener("click", (e) => {
+      const unlinkButton = document.querySelector(".unlink");
+      unlinkButton.addEventListener("click", (e) => {
         e.preventDefault();
-        const petName = <HTMLInputElement>document.querySelector("#name");
+        state.unlinkPet().then((res) => {
+          console.log(res);
+          cs.editPetId = "";
+          state.setState(cs);
+          Router.go("/my-reportedpets");
+        });
+      });
+      const saveButton = document.querySelector(".report-pet");
+      saveButton.addEventListener("click", (e) => {
+        e.preventDefault();
         cs.reportPetName = petName.value;
-
         state.setState(cs);
-        const formOk = checkForm();
-        if (formOk) {
-          state.reportLostPet().then((res) => {
-            if (res) {
-              Router.go("./my-reportedpets");
-            } else {
-              alert("Esa nombre de mascota ya ha sido reportado");
-            }
-          });
-        }
+        state.updateLostPet().then((res) => {
+          if (res) {
+            console.log("La respuesta es", res);
+            Router.go("./my-reportedpets");
+          }
+        });
       });
     }
   }
 );
 
-function checkForm() {
-  const cs = state.getState();
-  if (!cs.reportPetName) {
-    alert("Ingresar nombre de mascota");
-  } else {
-    if (!cs.reportPetLat && !cs.reportPetLng) {
-      alert("Ingresar ultimo lugar");
-    } else {
-      if (!cs.reportPetPicture) {
-        alert("Ingresar imagen");
-      } else {
-        return true;
-      }
-    }
-  }
-}
+// function checkForm() {
+//   const cs = state.getState();
+//   if (!cs.reportPetName) {
+//     alert("Ingresar nombre de mascota");
+//   } else {
+//     if (!cs.reportPetLat && !cs.reportPetLng) {
+//       alert("Ingresar ultimo lugar");
+//     } else {
+//       if (!cs.reportPetPicture) {
+//         alert("Ingresar imagen");
+//       } else {
+//         return true;
+//       }
+//     }
+//   }
+// }
