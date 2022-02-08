@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv";
 import "./router";
 import "./pages/home-page";
 import "./pages/report-pet";
@@ -15,4 +14,3 @@ import { state } from "./state";
   headerComponent();
   state.init();
 })();
-dotenv.config;

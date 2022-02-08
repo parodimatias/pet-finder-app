@@ -17,7 +17,6 @@ customElements.define(
     }
 
     render() {
-      console.log(process.env.MAPBOX_TOKEN);
       const cs = state.getState();
       this.className = "home-page";
 
