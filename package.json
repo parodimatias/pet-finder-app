@@ -7,7 +7,7 @@
     "dev:fe": "parcel serve ./fe-src/index.html --dist-dir ./fe-dist",
     "build:be": "tsc",
     "build:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist",
-    "build": "npm run build:be && npm run build:fe",
+    "build": "yarn build:be && yarn build:fe",
     "start": "node ./be-dist/index.js"
   },
   "dependencies": {
@@ -24,12 +24,11 @@
     "jsonwebtoken": "^8.5.1",
     "mapbox": "^1.0.0-beta10",
     "mapbox-gl": "^2.6.1",
+    "parcel": "^2.3.1",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^7.0.0-alpha.2",
     "typescript": "^4.5.5"
   },
-  "devDependencies": {
-    "parcel": "^2.2.1"
-  }
+  "devDependencies": {}
 }
