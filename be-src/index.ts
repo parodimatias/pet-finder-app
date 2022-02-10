@@ -9,6 +9,7 @@ import {
   findUserbyPk,
   updateProfile,
   reportLostPet,
+  sendNotification,
 } from "./controller/user-controller";
 import {
   getPets,
@@ -16,6 +17,7 @@ import {
   deletePet,
   foundPet,
   updateLostPet,
+  foundClosePets,
 } from "./controller/pet-controller";
 const app = express();
 app.use(express.json());
@@ -124,43 +126,18 @@ app.patch("/pet", async (req, res) => {
 });
 app.put("/pet", async (req, res) => {
   const response = await updateLostPet(bodyToIndex(req.body));
-  console.log(response);
   res.json(response);
 });
-// });
-// app.get("/pets/", async (req, res) => {
-//   const pets = await getAllPets();
-//   res.json(pets);
-// });
-// app.put("/comercio/:id", async (req, res) => {
-//   const newComercio = await Comercio.update(req.body, {
-//     where: req.params,
-//   });
-//   const indexItem = bodyToIndex(req.body, req.params.id);
-//   console.log(indexItem);
-//   try {
-//     await comercioAlgoliaIndex.partialUpdateObject(indexItem).wait();
-//     const resAl = await comercioAlgoliaIndex.search("");
-//     console.log("Current objects: ", resAl.hits);
-//     res.json("updated");
-//   } catch (e) {
-//     console.log(e);
-//   }
-// });
 
-// app.get("/comercios-cerca-de", async (req, res) => {
-//   console.log(req.query);
-//   comercioAlgoliaIndex
-//     .search("", {
-//       aroundLatLng: Object.values(req.query).join(),
-//       aroundRadius: 10000,
-//     })
-//     .then(({ hits }) => {
-//       console.log("hola");
-//       console.log(hits);
-//       res.json(hits);
-//     });
-// });
-console.log(__dirname);
+app.get("/pets/", async (req, res) => {
+  const coordinates = req.query;
+  const response = await foundClosePets(coordinates);
+  res.json(response);
+});
+
+app.post("/sendnotification", async (req, res) => {
+  const response = sendNotification(req.body);
+  res.json(response);
+});
 const path = require("path");
 app.get("*", express.static(path.join(__dirname, "/../fe-dist")));

@@ -9,6 +9,7 @@
     "built:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.6.1",
     "@types/dropzone": "^5.7.4",
     "@types/node": "^17.0.16",
     "@vaadin/router": "^1.7.4",

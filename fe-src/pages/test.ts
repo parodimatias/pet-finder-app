@@ -1,3 +1,4 @@
+import { state } from "../state";
 customElements.define(
   "test-pet",
   class extends HTMLElement {
@@ -8,10 +9,19 @@ customElements.define(
       this.render();
     }
     render() {
-      this.className = "result-page";
-      this.innerHTML = /*html*/ `
-      <custom-header></custom-header>
+      const cs = state.getState();
+      this.innerHTML = /*html*/ `<button class="button"></button>
+      <report-form class="asd">AAA</report-form>
   `;
+      const reportForm = <HTMLElement>this.querySelector(".asd");
+      const button = this.querySelector(".button");
+      button.addEventListener("click", (e) => {
+        e.preventDefault;
+        reportForm.setAttribute("petname", "pepe");
+      });
+      reportForm.addEventListener("report", (e: any) => {
+        console.log(e);
+      });
     }
   }
 );

@@ -1,6 +1,7 @@
 import { petAlgoliaIndex } from "../lib/algolia";
 import { Pet, User, Auth } from "../models/models";
 import { cloudinary } from "../lib/cloudinary";
+import { sendMail } from "../lib/sendgrid";
 import * as jwt from "jsonwebtoken";
 const SECRET = process.env.JWT_SECRET;
 export async function checkEmailExist(email: string): Promise<boolean> {
@@ -132,7 +133,6 @@ export async function reportLostPet(data: {
       const image = await cloudinary.uploader.upload(data.picture, {
         tags: "basic_sample",
       });
-      console.log(data.location);
       const newPet = await foundUser.createPet({
         nombre: data.nombre,
         lat: data.lat,
@@ -140,7 +140,6 @@ export async function reportLostPet(data: {
         picture: image.url,
         location: data.location,
       });
-      console.log(newPet);
       const algoliaRes = await petAlgoliaIndex
         .saveObject({
           objectID: newPet.get("id"),
@@ -156,4 +155,34 @@ export async function reportLostPet(data: {
     }
   }
   return "user not found, error";
+}
+export async function sendNotification({
+  petId,
+  reporterName,
+  reporterPhone,
+  reporterDesc,
+}) {
+  const data = await Pet.findOne({
+    where: {
+      id: petId,
+    },
+    include: [User],
+  });
+  const email = data.user.email;
+  const userFullName = data.user.fullName;
+  const msg = {
+    to: email, // Change to your recipient
+    from: "matias.parodi@outlook.com", // Change to your verified sender
+    subject: "Tu mascota ha sido reportada!",
+    text: ``,
+    html: `   Hola ${userFullName} <br>
+    Tu mascota ${data.nombre} ha sido encontrada por: <br>
+    Nombre: ${reporterName}.<br>
+    Numero: ${reporterPhone}<br>
+    Mensaje: ${reporterDesc}<br>
+    Contactalo lo mas rápido posible<br>
+    <strong>El equipo de Pet Finder App</strong>`,
+  };
+
+  sendMail(msg);
 }

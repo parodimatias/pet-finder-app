@@ -7,6 +7,7 @@ export async function deletePet(petId) {
       id: petId.petId,
     },
   });
+  await petAlgoliaIndex.deleteObject(petId.petId);
   return response;
 }
 export async function foundPet({ id, found }) {
@@ -38,8 +39,21 @@ export async function updateLostPet({
   lat,
   lng,
 }) {
+  if (picture) {
+    const image = await cloudinary.uploader.upload(picture, {
+      tags: "basic_sample",
+    });
+    const response = await Pet.update(
+      { picture: image.url },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+  }
   const response = await Pet.update(
-    { location, picture, nombre, lat, lng },
+    { location, nombre, lat, lng },
     {
       where: {
         id,
@@ -56,6 +70,20 @@ export async function updateLostPet({
       },
     })
     .wait();
-  console.log(algoliaRes);
   return response;
+}
+export async function foundClosePets({ lat, lng }) {
+  const algoliaSearch = await petAlgoliaIndex.search("", {
+    aroundLatLng: [lat, lng].join(","),
+    aroundRadius: 10000,
+  });
+  const hitIds = algoliaSearch.hits.map((hit) => {
+    return hit.objectID;
+  });
+  const foundPets = await Pet.findAll({
+    where: {
+      id: hitIds,
+    },
+  });
+  return foundPets;
 }

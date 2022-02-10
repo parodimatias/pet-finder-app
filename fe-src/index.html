@@ -18,20 +18,6 @@
     <div class="root"></div>
   </body>
   <script defer type="module" src="./index.ts"></script>
-  <template id="template-item">
-    <div class="pet__item">
-      <div class="pet__img-container"></div>
-      <div class="pet__data-container">
-        <div class="pet__description-container">
-          <p class="pet__description-name title-text"></p>
-          <p class="pet__description-location caption"></p>
-        </div>
-        <div class="pet__description-link">
-          <a class="pet__link" href="">REPORTAR INFORMACION</a>
-        </div>
-      </div>
-    </div>
-  </template>
   <template id="template-my-pets">
     <div class="pet__item">
       <div class="pet__img-container">
@@ -46,6 +32,22 @@
           <button class="pet__link">
             <img src="./pages/img/edit-button.png" />
           </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  <template id="template-lost-pets">
+    <div class="pet__item">
+      <div class="pet__img-container">
+        <img class="pet__img" />
+      </div>
+      <div class="pet__data-container">
+        <div class="pet__description-container">
+          <p class="pet__description-name title-text"></p>
+          <p class="pet__description-location caption"></p>
+        </div>
+        <div class="pet__description-link">
+          <button class="pet__link">REPORTAR INFORMACION</button>
         </div>
       </div>
     </div>

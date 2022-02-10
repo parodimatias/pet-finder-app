@@ -36,11 +36,9 @@ customElements.define(
         state.getAuthToken().then((res) => {
           if (res) {
             //log exitoso
-            console.log("LA", cs.lastAddress);
             if (cs.lastAddress)
               //a donde quiso ir el usuario
-              console.log("hola");
-            Router.go(cs.lastAddress);
+              Router.go(cs.lastAddress);
           } else {
             //si no a home page
             Router.go("/");

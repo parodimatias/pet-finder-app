@@ -92,11 +92,9 @@ function auth() {
           //log exitoso
           if (cs.lastAddress)
             //a donde quiso ir el usuario
-            console.log("Going to LA");
-          Router.go(cs.lastAddress);
+            Router.go(cs.lastAddress);
         } else {
           //si no a home page
-          console.log("Going Home Page");
           Router.go("/");
         }
       });

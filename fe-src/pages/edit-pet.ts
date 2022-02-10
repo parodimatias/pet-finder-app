@@ -99,7 +99,6 @@ customElements.define(
       foundButton.addEventListener("click", (e) => {
         e.preventDefault();
         state.foundPet().then((res) => {
-          console.log(res);
           cs.editPetId = "";
           state.setState(cs);
           Router.go("/my-reportedpets");
@@ -109,7 +108,6 @@ customElements.define(
       unlinkButton.addEventListener("click", (e) => {
         e.preventDefault();
         state.unlinkPet().then((res) => {
-          console.log(res);
           cs.editPetId = "";
           state.setState(cs);
           Router.go("/my-reportedpets");
@@ -122,7 +120,6 @@ customElements.define(
         state.setState(cs);
         state.updateLostPet().then((res) => {
           if (res) {
-            console.log("La respuesta es", res);
             Router.go("./my-reportedpets");
           }
         });
@@ -130,20 +127,3 @@ customElements.define(
     }
   }
 );
-
-// function checkForm() {
-//   const cs = state.getState();
-//   if (!cs.reportPetName) {
-//     alert("Ingresar nombre de mascota");
-//   } else {
-//     if (!cs.reportPetLat && !cs.reportPetLng) {
-//       alert("Ingresar ultimo lugar");
-//     } else {
-//       if (!cs.reportPetPicture) {
-//         alert("Ingresar imagen");
-//       } else {
-//         return true;
-//       }
-//     }
-//   }
-// }

@@ -1,7 +1,9 @@
 import * as MapboxClient from "mapbox";
 import * as mapboxgl from "mapbox-gl";
 import { state } from "../state";
-const mapboxClient = new MapboxClient(process.env.MAPBOX_TOKEN);
+const mapboxClient = new MapboxClient(
+  "pk.eyJ1IjoibWF0aWFzcGFyb2RpIiwiYSI6ImNreTh6NnNlcDAxZXQycWs5c2VndTQxemYifQ.g5ici0kzf8C_pEntf30JYA"
+);
 export function initMap(map) {
   mapboxgl.accessToken =
     "pk.eyJ1IjoibWF0aWFzcGFyb2RpIiwiYSI6ImNreTh6NnNlcDAxZXQycWs5c2VndTQxemYifQ.g5ici0kzf8C_pEntf30JYA";

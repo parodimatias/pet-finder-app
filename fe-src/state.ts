@@ -1,6 +1,5 @@
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "";
 import { Router } from "@vaadin/router";
-// import { UPSERT } from "sequelize/types/lib/query-types";
 const state = {
   data: {
     token: "",
@@ -17,6 +16,7 @@ const state = {
     reportPetLng: false,
     reportPetPicture: "",
     myReportedPets: [],
+    reporter: {},
     logged: false,
     lastAddress: "",
   },
@@ -42,7 +42,6 @@ const state = {
       cb();
     }
     localStorage.setItem("data", JSON.stringify(state.getState()));
-    console.log("el state cambio", this.data);
   },
   subscribe(callback: (any) => any) {
     this.listeners.push(callback);
@@ -72,7 +71,6 @@ const state = {
       }),
     });
     const response = await data.json();
-    console.log(response);
     return response;
   },
 
@@ -200,19 +198,20 @@ const state = {
       state.setState(cs);
   },
   async getNearLostPets() {
-    const cs = state.getState;
-    const data = await fetch(API_BASE_URL + "/auth/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    });
-    //enviar location y recibir pets mediante busqueda en algolia
+    const cs = state.getState();
+    const data = await fetch(
+      API_BASE_URL + "/pets?lng=" + cs.lng + "&lat=" + cs.lat,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const response = await data.json();
+    return response;
   },
   async getMyReportedPets() {
     const cs = state.getState();
-    console.log("/pets/" + cs.userId);
     const response = await fetch(API_BASE_URL + "/pets/" + cs.userId);
     const data = await response.json();
     return data;
@@ -258,6 +257,18 @@ const state = {
         lng: cs.reportPetLng,
         location: cs.reportPetLocation,
       }),
+    });
+    const response = await data.json();
+    return response;
+  },
+  async sendNotification() {
+    const cs = state.getState();
+    const data = await fetch(API_BASE_URL + "/sendnotification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cs.reporter),
     });
     const response = await data.json();
     return response;
