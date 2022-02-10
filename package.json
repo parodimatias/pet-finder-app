@@ -2,6 +2,7 @@
   "name": "sequelize",
   "version": "1.0.0",
   "license": "MIT",
+  "type": "commonjs",
   "scripts": {
     "dev:be": "nodemon --watch ./be-src --exec ts-node ./be-src/index.ts",
     "dev:fe": "parcel serve ./fe-src/index.html --dist-dir ./fe-dist",
