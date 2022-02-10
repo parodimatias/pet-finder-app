@@ -5,8 +5,10 @@
   "scripts": {
     "dev:be": "nodemon --watch ./be-src --exec ts-node ./be-src/index.ts",
     "dev:fe": "parcel serve ./fe-src/index.html --dist-dir ./fe-dist",
-    "built:be": "tsc",
-    "built:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist"
+    "build:be": "tsc",
+    "build:fe": "parcel build ./fe-src/index.html --dist-dir ./fe-dist",
+    "build": "npm run build:be && npm run build:fe",
+    "start": "node ./be-dist/index.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",
