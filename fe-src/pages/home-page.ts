@@ -120,8 +120,10 @@ function lostPetsRender(container, pets) {
       reportForm.addEventListener("report", (e: any) => {
         Object.assign(cs.reporter, e.detail);
         state.setState(cs);
-        state.sendNotification();
-        alert("Notification sent");
+        state.sendNotification().then((res) => {
+          alert("Notification sent");
+          reportForm.style.display = "none";
+        });
       });
     });
   }
