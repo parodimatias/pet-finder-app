@@ -1,6 +1,5 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
-import { geocodeReverse } from "../lib/mapbox";
 customElements.define(
   "my-reportedpets",
   class extends HTMLElement {

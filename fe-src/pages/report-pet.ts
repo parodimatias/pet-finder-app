@@ -2,10 +2,7 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 import Dropzone from "dropzone";
 import { initMap, initSearchForm } from "../lib/mapbox";
-import { any } from "sequelize/types/lib/operators";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoibWF0aWFzcGFyb2RpIiwiYSI6ImNreTh6NnNlcDAxZXQycWs5c2VndTQxemYifQ.g5ici0kzf8C_pEntf30JYA";
 customElements.define(
   "report-pet",
   class extends HTMLElement {
