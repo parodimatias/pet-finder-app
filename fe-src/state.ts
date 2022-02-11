@@ -26,12 +26,7 @@ const state = {
     const localData = localStorage.getItem("data");
     if (localData !== null) {
       let cs = JSON.parse(localData);
-      if (cs.logged) {
-        state.setState(cs);
-      } else {
-        cs = this.data;
-        state.setState(cs);
-      }
+      state.setState(cs);
     }
   },
   getState() {

@@ -65,6 +65,7 @@ function success(position) {
   cs.lat = position.coords.latitude;
   cs.lng = position.coords.longitude;
   state.setState(cs);
+  this.render();
 }
 function error() {
   alert("Unable to retrieve your location");
