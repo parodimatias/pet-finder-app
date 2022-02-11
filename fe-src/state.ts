@@ -1,4 +1,5 @@
 const API_BASE_URL = "https://matias-pet-finder-app.herokuapp.com";
+// const API_BASE_URL = "http://localhost:3000";
 import { Router } from "@vaadin/router";
 const state = {
   data: {
@@ -18,7 +19,7 @@ const state = {
     myReportedPets: [],
     reporter: {},
     logged: false,
-    lastAddress: "",
+    lastAddress: "/",
   },
   listeners: [],
   init() {
@@ -41,6 +42,7 @@ const state = {
     for (const cb of this.listeners) {
       cb();
     }
+    console.log("el state ha cambiado", this.data);
     localStorage.setItem("data", JSON.stringify(state.getState()));
   },
   subscribe(callback: (any) => any) {
@@ -153,6 +155,7 @@ const state = {
     });
     const response = await data.json();
     if (response == "wrong email or password") {
+      alert("wrong password");
       return false;
     }
     cs.token = response;
@@ -162,7 +165,7 @@ const state = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Beaarer " + token,
+        Authorization: "Bearer " + token,
       },
     });
     const responseMe = await dataMe.json();
@@ -186,14 +189,16 @@ const state = {
       userId: "",
       lat: false,
       lng: false,
+      editPetId: "",
       reportPetName: "",
       reportPetLocation: "",
       reportPetLat: false,
       reportPetLng: false,
       reportPetPicture: "",
       myReportedPets: [],
+      reporter: {},
       logged: false,
-      lastAddress: "",
+      lastAddress: "/",
     }),
       state.setState(cs);
   },

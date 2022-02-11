@@ -48,7 +48,6 @@ function myPetsRender(container, pets) {
     document.querySelector("#template-my-pets")
   );
   const petImage: any = template.content.querySelector(".pet__img");
-  console.log(petImage);
   const petImageContainer = template.content.querySelector(
     ".pet__img-container"
   );

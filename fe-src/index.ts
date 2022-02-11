@@ -12,6 +12,7 @@ import { reportFormComponent } from "./components/report-form";
 import { state } from "./state";
 
 (function () {
+  console.log("hola");
   headerComponent();
   reportFormComponent();
   state.init();
