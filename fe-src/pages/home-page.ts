@@ -65,7 +65,17 @@ function success(position) {
   cs.lat = position.coords.latitude;
   cs.lng = position.coords.longitude;
   state.setState(cs);
-  this.render();
+  const giveLocationButton = <HTMLElement>(
+    document.querySelector(".give-location-button")
+  );
+  const caption = <HTMLElement>document.querySelector(".caption");
+  if (cs.lat && cs.lng) {
+    giveLocationButton.style.display = "none";
+    caption.style.display = "none";
+    state.getNearLostPets().then((res) => {
+      lostPetsRender(document.querySelector(".pets-container"), res);
+    });
+  }
 }
 function error() {
   alert("Unable to retrieve your location");
