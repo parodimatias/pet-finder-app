@@ -121,6 +121,8 @@ function lostPetsRender(container, pets) {
         Object.assign(cs.reporter, e.detail);
         state.setState(cs);
         state.sendNotification().then((res) => {
+          console.log(res);
+
           alert("Notification sent");
           reportForm.style.display = "none";
         });
