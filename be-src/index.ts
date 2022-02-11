@@ -136,7 +136,7 @@ app.get("/pets/", async (req, res) => {
 });
 
 app.post("/sendnotification", async (req, res) => {
-  const response = sendNotification(req.body);
+  const response = await sendNotification(req.body);
   res.json(response);
 });
 const path = require("path");

@@ -97,12 +97,26 @@ function lostPetsRender(container, pets) {
   const petName = <HTMLElement>(
     template.content.querySelector(".pet__description-name")
   );
+  const reportForm = <HTMLElement>document.querySelector(".report-pet-form");
+  reportForm.addEventListener("report", (ee: any) => {
+    ee.preventDefault();
+    Object.assign(cs.reporter, ee.detail);
+    state.setState(cs);
+    state
+      .sendNotification()
+      .then((res) => {
+        return res;
+      })
+      .then((response) => {
+        alert("Notification sent");
+        reportForm.style.display = "none";
+      });
+  });
   for (const pet of pets) {
     petImage.src = pet.picture;
     const petLocation = template.content.querySelector(
       ".pet__description-location"
     );
-
     const petLink = template.content.querySelector(".pet__link");
     petLink.id = pet.id;
     petLocation.textContent = pet.location;
@@ -110,23 +124,13 @@ function lostPetsRender(container, pets) {
     const clone = document.importNode(template.content, true);
     container.appendChild(clone);
     const reportButton = document.getElementById(pet.id);
-    const reportForm = <HTMLElement>document.querySelector(".report-pet-form");
     reportButton.setAttribute("petname", pet.nombre);
     reportButton.addEventListener("click", (e) => {
       e.preventDefault();
       cs.reporter.petId = reportButton.getAttribute("id");
       reportForm.setAttribute("petname", reportButton.getAttribute("petname"));
       reportForm.style.display = "block";
-      reportForm.addEventListener("report", (e: any) => {
-        Object.assign(cs.reporter, e.detail);
-        state.setState(cs);
-        state.sendNotification().then((res) => {
-          console.log(res);
-
-          alert("Notification sent");
-          reportForm.style.display = "none";
-        });
-      });
+      state.setState(cs);
     });
   }
 }

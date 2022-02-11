@@ -47,6 +47,7 @@ export function headerComponent() {
 
         style.textContent = `
         .header-container{
+          z-index: 9999;
           box-sizing:border-box;
           background:pink;
           height:60px;
@@ -80,7 +81,8 @@ export function headerComponent() {
           top:0;
           background-color:#8AF1FF;
           width:100%;
-          height:600px
+          height:600px;
+          z-index:999;
         }
         .option-container{
           display:flex;

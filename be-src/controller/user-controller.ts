@@ -174,8 +174,8 @@ export async function sendNotification({
     to: email, // Change to your recipient
     from: "matias.parodi@outlook.com", // Change to your verified sender
     subject: "Tu mascota ha sido reportada!",
-    text: ``,
-    html: `   Hola ${userFullName} <br>
+    text: `Hola`,
+    html: `Hola ${userFullName} <br>
     Tu mascota ${data.nombre} ha sido encontrada por: <br>
     Nombre: ${reporterName}.<br>
     Numero: ${reporterPhone}<br>
@@ -183,6 +183,6 @@ export async function sendNotification({
     Contactalo lo mas rápido posible<br>
     <strong>El equipo de Pet Finder App</strong>`,
   };
-
-  sendMail(msg);
+  const response = await sendMail(msg);
+  return response;
 }
