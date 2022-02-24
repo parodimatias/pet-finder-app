@@ -30,11 +30,16 @@ app.listen(port, () => {
 });
 
 app.post("/email", async (req, res) => {
+  console.log(req.body);
   const { email } = req.body;
-  if (await checkEmailExist(email)) {
-    res.json(true);
-  } else {
-    res.json(false);
+  try {
+    if (await checkEmailExist(email)) {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+  } catch (e) {
+    res.error(e);
   }
 });
 app.post("/auth", async (req, res) => {
