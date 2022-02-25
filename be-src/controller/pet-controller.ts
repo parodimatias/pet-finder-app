@@ -1,89 +1,108 @@
 import { petAlgoliaIndex } from "../lib/algolia";
-import { Pet, User, Auth } from "../models/models";
+import { Pet } from "../models/models";
 import { cloudinary } from "../lib/cloudinary";
-export async function deletePet(petId) {
-  const response = await Pet.destroy({
-    where: {
-      id: petId.petId,
-    },
-  });
-  await petAlgoliaIndex.deleteObject(petId.petId);
-  return response;
-}
-export async function foundPet({ id, found }) {
-  const response = await Pet.update(
-    { found },
-    {
+
+const petController = {
+  async deletePet(petId) {
+    const response = await Pet.destroy({
       where: {
-        id,
+        id: petId.petId,
       },
-    }
-  );
-  return response;
-}
-export async function getPets(userId) {
-  const pets = await Pet.findAll({
-    where: userId,
-  });
-  return pets;
-}
-export async function getAllPets() {
-  const data = await Pet.findAll();
-  return data;
-}
-export async function updateLostPet({
-  id,
-  location,
-  picture,
-  nombre,
-  lat,
-  lng,
-}) {
-  if (picture) {
-    const image = await cloudinary.uploader.upload(picture, {
-      tags: "basic_sample",
     });
+    await petAlgoliaIndex.deleteObject(petId.petId);
+    return response;
+  },
+  async foundPet({ id, found }) {
     const response = await Pet.update(
-      { picture: image.url },
+      { found },
       {
         where: {
           id,
         },
       }
     );
-  }
-  const response = await Pet.update(
-    { location, nombre, lat, lng },
-    {
-      where: {
-        id,
-      },
+    return response;
+  },
+  async getPets(userId) {
+    const pets = await Pet.findAll({
+      where: userId,
+    });
+    return pets;
+  },
+  async getAllPets() {
+    const data = await Pet.findAll();
+    return data;
+  },
+  async updateLostPet({ id, location, picture, nombre, lat, lng }) {
+    if (picture) {
+      const image = await cloudinary.uploader.upload(picture, {
+        tags: "basic_sample",
+      });
+      const response = await Pet.update(
+        { picture: image.url },
+        {
+          where: {
+            id,
+          },
+        }
+      );
     }
-  );
-  const algoliaRes = await petAlgoliaIndex
-    .saveObject({
-      objectID: id,
-      nombre: nombre,
-      _geoloc: {
-        lat: lat,
-        lng: lng,
+    const response = await Pet.update(
+      { location, nombre, lat, lng },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    const algoliaRes = await petAlgoliaIndex
+      .saveObject({
+        objectID: id,
+        nombre: nombre,
+        _geoloc: {
+          lat: lat,
+          lng: lng,
+        },
+      })
+      .wait();
+    return response;
+  },
+  async foundClosePets({ lat, lng }) {
+    const algoliaSearch = await petAlgoliaIndex.search("", {
+      aroundLatLng: [lat, lng].join(","),
+      aroundRadius: 10000,
+    });
+    const hitIds = algoliaSearch.hits.map((hit) => {
+      return hit.objectID;
+    });
+    const foundPets = await Pet.findAll({
+      where: {
+        id: hitIds,
       },
-    })
-    .wait();
-  return response;
-}
-export async function foundClosePets({ lat, lng }) {
-  const algoliaSearch = await petAlgoliaIndex.search("", {
-    aroundLatLng: [lat, lng].join(","),
-    aroundRadius: 10000,
-  });
-  const hitIds = algoliaSearch.hits.map((hit) => {
-    return hit.objectID;
-  });
-  const foundPets = await Pet.findAll({
-    where: {
-      id: hitIds,
-    },
-  });
-  return foundPets;
-}
+    });
+    return foundPets;
+  },
+  bodyToIndex(body) {
+    const respuesta: any = {};
+    if (body.nombre) {
+      respuesta.nombre = body.nombre;
+    }
+    if (body.picture) {
+      respuesta.picture = body.picture;
+    }
+
+    if (body.lat && body.lng) {
+      respuesta.lat = body.lat;
+      respuesta.lng = body.lng;
+    }
+
+    if (body.id) {
+      respuesta.id = body.id;
+    }
+    if (body.location) {
+      respuesta.location = body.location;
+    }
+    return respuesta;
+  },
+};
+export default petController;
