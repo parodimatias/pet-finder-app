@@ -1,8 +1,4 @@
-import { Router } from "@vaadin/router";
-import { report } from "process";
-import { reportFormComponent } from "../components/report-form";
 import { state } from "../state";
-import { img } from "./img/test";
 customElements.define(
   "home-page",
   class extends HTMLElement {

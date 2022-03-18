@@ -1,4 +1,3 @@
-import { Router } from "@vaadin/router";
 import { state } from "../../state";
 export function reportFormComponent() {
   customElements.define(

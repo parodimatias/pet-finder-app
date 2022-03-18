@@ -1,6 +1,6 @@
 import { petAlgoliaIndex } from "../lib/algolia";
-import { Pet } from "../models/models";
 import { cloudinary } from "../lib/cloudinary";
+import { Pet } from "../models/models";
 
 const petController = {
   async deletePet(petId) {
@@ -102,6 +102,7 @@ const petController = {
     if (body.location) {
       respuesta.location = body.location;
     }
+    console.log("body es", respuesta);
     return respuesta;
   },
 };
