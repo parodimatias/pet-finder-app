@@ -6,7 +6,7 @@ import userController from "./controller/user-controller";
 const app = express();
 app.use(express.json());
 app.use(express.static("dist"));
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "https://pet-finder-app-882b7.web.app/" }));
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
