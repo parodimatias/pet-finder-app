@@ -67,21 +67,3 @@ export async function initSearchForm(map, searchText) {
     }
   );
 }
-export async function geocodeReverse(lat, lng) {
-  const response = await mapboxClient.geocoding
-    .reverseGeocode({
-      query: lng,
-      lat,
-    })
-    .send();
-  console.log(response);
-  // if (
-  //   response &&
-  //   response.body &&
-  //   response.body.features &&
-  //   response.body.features.length
-  // ) {
-  //   var feature = response.body.features[0];
-  return "hola";
-  // }
-}
